@@ -1,0 +1,11 @@
+.gradle/
+build/
+run/
+run-data/
+.idea/
+*.iml
+.mcstudio/
+out/
+
+# local build / gradle logs
+*.log

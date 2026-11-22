@@ -1,0 +1,124 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = mod_version
+group = mod_group_id
+base { archivesName = mod_id }
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+neoForge {
+    version = neo_version
+
+    runs {
+        client {
+            client()
+            gameDirectory = file('run')
+        }
+        // Dev only: starts the client and joins a local dev server immediately.
+        clientQuick {
+            client()
+            gameDirectory = file('run')
+            programArguments.addAll(['--quickPlayMultiplayer', '127.0.0.1:25565'])
+        }
+        // Dev only: joins the local server and cycles through every mod screen for screenshots.
+        clientGuiDemo {
+            client()
+            gameDirectory = file('run')
+            programArguments.addAll(['--quickPlayMultiplayer', '127.0.0.1:25565'])
+            jvmArgument '-Dcvtransit.guiDemo=true'
+        }
+        server {
+            server()
+            gameDirectory = file('run/server')
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    // Create, Ponder, Flywheel
+    maven { url = 'https://maven.createmod.net' }
+    // Registrate snapshots
+    maven { url = 'https://maven.ithundxr.dev/snapshots' }
+    // NeoForge config api port (Ponder requirement at runtime)
+    maven { url = 'https://raw.githubusercontent.com/Fuzss/modresources/main/maven/' }
+    // Regional mirrors for the big repositories
+    maven { url = 'https://bmclapi2.bangbang93.com/maven/' }
+    maven { url = 'https://maven.aliyun.com/repository/public/' }
+    mavenCentral()
+}
+
+dependencies {
+    // Create itself (slim = no embedded libraries, so the ones below are explicit)
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+
+    // Ponder provides Create's UI/ponder runtime and embeds catnip
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}") { transitive = false }
+
+    // Flywheel API + implementation (Create links against it)
+    implementation("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}") { transitive = false }
+    implementation("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}") { transitive = false }
+
+    // Registrate, used by Create at runtime
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}") { transitive = false }
+
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: '[1.21.1,1.22)',
+            neo_version            : neo_version,
+            neo_version_range      : '[21.1.0,)',
+            loader_version_range   : '[4,)',
+            create_version_range   : '[6.0.10,6.1)',
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    // The GUI demo hook is a development aid; keep it out of the published jar.
+    exclude 'com/experiencedbutter/villagetransit/client/GuiDemo*.class'
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors
+        ])
+    }
+}

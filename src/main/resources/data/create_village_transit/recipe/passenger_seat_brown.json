@@ -1,0 +1,16 @@
+﻿{
+    "ingredients":  [
+                        {
+                            "item":  "create:brown_seat"
+                        },
+                        {
+                            "item":  "minecraft:emerald"
+                        }
+                    ],
+    "category":  "misc",
+    "result":  {
+                   "id":  "create_village_transit:passenger_seat_brown",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

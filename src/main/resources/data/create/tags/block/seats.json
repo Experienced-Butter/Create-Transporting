@@ -1,0 +1,21 @@
+﻿{
+    "replace":  false,
+    "values":  [
+                   "create_village_transit:passenger_seat_white",
+                   "create_village_transit:passenger_seat_orange",
+                   "create_village_transit:passenger_seat_magenta",
+                   "create_village_transit:passenger_seat_light_blue",
+                   "create_village_transit:passenger_seat_yellow",
+                   "create_village_transit:passenger_seat_lime",
+                   "create_village_transit:passenger_seat_pink",
+                   "create_village_transit:passenger_seat_gray",
+                   "create_village_transit:passenger_seat_light_gray",
+                   "create_village_transit:passenger_seat_cyan",
+                   "create_village_transit:passenger_seat_purple",
+                   "create_village_transit:passenger_seat_blue",
+                   "create_village_transit:passenger_seat_brown",
+                   "create_village_transit:passenger_seat_green",
+                   "create_village_transit:passenger_seat_red",
+                   "create_village_transit:passenger_seat_black"
+               ]
+}

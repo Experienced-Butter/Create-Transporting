@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "create_village_transit:item/netherite_coin"
+                 },
+    "parent":  "minecraft:item/generated"
+}

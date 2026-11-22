@@ -1,0 +1,1 @@
+{"variants":{"lit=false":{"model":"create_village_transit:block/trade_station"},"lit=true":{"model":"create_village_transit:block/trade_station_lit"}}}

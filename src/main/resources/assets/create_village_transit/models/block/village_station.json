@@ -1,0 +1,1 @@
+{"parent":"minecraft:block/cube_bottom_top","textures":{"particle":"create_village_transit:block/village_station_top","top":"create_village_transit:block/village_station_top","bottom":"create:block/brass_casing","side":"create:block/brass_casing"}}

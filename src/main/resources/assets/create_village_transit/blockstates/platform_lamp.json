@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "lit=false": { "model": "create_village_transit:block/platform_lamp" },
+    "lit=true": { "model": "create_village_transit:block/platform_lamp" }
+  }
+}

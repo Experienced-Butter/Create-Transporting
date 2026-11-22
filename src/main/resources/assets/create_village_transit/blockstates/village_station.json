@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=false": { "model": "create_village_transit:block/village_station" },
+    "active=true": { "model": "create_village_transit:block/village_station_active" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "create:track_station" },
+    { "item": "minecraft:emerald" },
+    { "item": "minecraft:compass" }
+  ],
+  "result": {
+    "id": "create_village_transit:village_station",
+    "count": 1
+  }
+}

@@ -1,0 +1,10 @@
+﻿{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "minecraft:chest" },
+    { "item": "minecraft:emerald" },
+    { "item": "minecraft:iron_ingot" }
+  ],
+  "result": { "id": "create_village_transit:trade_station", "count": 1 }
+}

@@ -1,0 +1,7 @@
+﻿{
+    "variants":  {
+                     "":  {
+                              "model":  "create_village_transit:block/passenger_seat_purple"
+                          }
+                 }
+}

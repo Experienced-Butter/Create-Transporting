@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.neoforged.net/releases' }
+        maven { url = 'https://bmclapi2.bangbang93.com/maven/' }
+        maven { url = 'https://maven.aliyun.com/repository/public/' }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+// NeoForge/ModDevGradle register run tasks late; configure-on-demand hides them.
+gradle.startParameter.configureOnDemand = false
+
+rootProject.name = 'create_village_transit'

@@ -1,0 +1,34 @@
+{
+  "textures": {
+    "particle": "create:block/seat/top_light_gray",
+    "top": "create:block/seat/top_light_gray",
+    "side": "create:block/seat/side_light_gray",
+    "base": "create_village_transit:block/passenger_seat_base"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "down": { "texture": "#base" },
+        "up": { "texture": "#base" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "west": { "texture": "#base" },
+        "east": { "texture": "#base" }
+      }
+    },
+    {
+      "from": [0, 2, 0],
+      "to": [16, 8, 16],
+      "faces": {
+        "down": { "texture": "#base" },
+        "up": { "texture": "#top" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west": { "texture": "#side" },
+        "east": { "texture": "#side" }
+      }
+    }
+  ]
+}

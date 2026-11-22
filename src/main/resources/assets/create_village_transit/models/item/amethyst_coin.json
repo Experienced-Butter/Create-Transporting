@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "create_village_transit:item/amethyst_coin"
+                 },
+    "parent":  "minecraft:item/generated"
+}

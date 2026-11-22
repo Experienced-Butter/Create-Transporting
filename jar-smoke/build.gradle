@@ -1,0 +1,44 @@
+// Packaging smoke test: loads the built mod jar from run/mods (instead of the Gradle source set)
+// next to the same Create runtime the development environment uses.
+//
+//   cd jar-smoke
+//   gradlew build -p ..           (or copy ../build/libs/*.jar into run/mods)
+//   gradlew runServer
+//
+// Expected log lines: "Create: Village Transit 0.1.0 (create_village_transit)" and "Done".
+
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = '0.0.0'
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = '21.1.219'
+    runs {
+        server {
+            server()
+            gameDirectory = file('run')
+            programArgument '--nogui'
+        }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.createmod.net' }
+    maven { url = 'https://maven.ithundxr.dev/snapshots' }
+    maven { url = 'https://bmclapi2.bangbang93.com/maven/' }
+    maven { url = 'https://maven.aliyun.com/repository/public/' }
+    mavenCentral()
+}
+
+dependencies {
+    // Create runtime, exactly like the development environment; the mod under test comes from run/mods.
+    implementation("com.simibubi.create:create-1.21.1:6.0.10-281:slim") { transitive = false }
+    implementation("net.createmod.ponder:ponder-neoforge:1.0.92+mc1.21.1") { transitive = false }
+    implementation("dev.engine-room.flywheel:flywheel-neoforge-api-1.21.1:1.0.7") { transitive = false }
+    implementation("dev.engine-room.flywheel:flywheel-neoforge-1.21.1:1.0.7") { transitive = false }
+    implementation("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67") { transitive = false }
+}
