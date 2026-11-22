@@ -9,3 +9,6 @@ out/
 
 # local build / gradle logs
 *.log
+
+# staged upload copies (the texts are fine to commit, the jar is not)
+release-materials/*.jar

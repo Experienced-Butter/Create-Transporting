@@ -1,0 +1,2 @@
+"create_village_transit" | Minecraft 1.21.1 | NeoForge 21.1 | Create 6.0.10 | MIT
+Turns villages into Create passenger stations: travellers gather at a village station, platform lamps link a village to a train station, passenger seats carry them, arrivals pay the train owner, accidents charge the owner.
