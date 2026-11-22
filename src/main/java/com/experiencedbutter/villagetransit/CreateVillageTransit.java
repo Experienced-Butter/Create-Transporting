@@ -30,6 +30,10 @@ public class CreateVillageTransit {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public CreateVillageTransit(IEventBus modBus, ModContainer container) {
+        if (net.neoforged.fml.loading.FMLEnvironment.dist.isClient()) {
+            container.registerExtensionPoint(net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
+                    (mod, parent) -> new net.neoforged.neoforge.client.gui.ConfigurationScreen(mod, parent));
+        }
         VTConfig.register(container);
 
         ModBlocks.BLOCKS.register(modBus);

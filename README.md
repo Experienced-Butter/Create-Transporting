@@ -1,5 +1,9 @@
 # Create: Village Transit / 机械动力：通勤运输
 
+<img src="logo.png" alt="Create: Village Transit" width="160" align="right">
+
+> **Release 0.1.0** · Minecraft 1.21.1 · NeoForge 21.1 · Create 6.0.10 · MIT
+
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green)]()
 [![NeoForge](https://img.shields.io/badge/NeoForge-21.1-orange)]()
 [![Create](https://img.shields.io/badge/Create-6.0.10-blue)]()

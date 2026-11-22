@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — playtest pass
+## 0.1.0 — 2026-11-22
 
 ### Changed
 
@@ -29,7 +29,7 @@
 - **Breaking a village station** discards its travellers instead of dropping them as items.
 - “Next traveller” became “Next batch of travellers”.
 
-## 0.1.0 — first playable
+### Initial implementation
 
 ### Added
 
