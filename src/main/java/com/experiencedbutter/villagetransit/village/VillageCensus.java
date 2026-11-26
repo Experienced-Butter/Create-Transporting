@@ -52,8 +52,7 @@ public final class VillageCensus {
             return Result.incomplete("area_not_loaded");
         }
 
-        net.minecraft.world.level.levelgen.structure.StructureStart start = level.structureManager()
-                .getStructureWithPieceAt(center, StructureTags.VILLAGE);
+        net.minecraft.world.level.levelgen.structure.StructureStart start = findVillageStart(level, center, cfg);
         boolean inStructure = start != null && start.isValid();
         String villageId = "";
         if (inStructure) {
@@ -117,4 +116,59 @@ public final class VillageCensus {
         }
         return true;
     }
+    /**
+     * A village is any structure that matches the configured tags, ids or id fragments. The vanilla
+     * tag alone is not enough on modded packs: village-replacing mods keep their own structure ids.
+     */
+    private static net.minecraft.world.level.levelgen.structure.StructureStart findVillageStart(
+            ServerLevel level, BlockPos center, VTConfig.Snapshot cfg) {
+        var candidates = level.structureManager().getAllStructuresAt(center);
+        for (var structure : candidates.keySet()) {
+            if (!matchesVillage(level, structure, cfg)) {
+                continue;
+            }
+            var start = level.structureManager().getStructureAt(center, structure);
+            if (start != null && start.isValid()) {
+                return start;
+            }
+        }
+        return null;
+    }
+
+    private static boolean matchesVillage(ServerLevel level, net.minecraft.world.level.levelgen.structure.Structure structure,
+                                          VTConfig.Snapshot cfg) {
+        var registry = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        var key = registry.getResourceKey(structure).orElse(null);
+        if (key == null) {
+            return false;
+        }
+        String path = key.location().toString();
+        for (String exact : cfg.structureIds) {
+            if (!exact.isBlank() && path.equals(exact.trim())) {
+                return true;
+            }
+        }
+        for (String part : cfg.structureNameContains) {
+            if (!part.isBlank() && path.contains(part.trim())) {
+                return true;
+            }
+        }
+        for (String tag : cfg.structureTags) {
+            if (tag.isBlank()) {
+                continue;
+            }
+            try {
+                var tagKey = net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.STRUCTURE,
+                        net.minecraft.resources.ResourceLocation.parse(tag.trim()));
+                var holder = registry.getHolder(key);
+                if (holder.isPresent() && holder.get().is(tagKey)) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+                // Malformed tag in the config: skip it instead of failing the whole survey.
+            }
+        }
+        return false;
+    }
+
 }

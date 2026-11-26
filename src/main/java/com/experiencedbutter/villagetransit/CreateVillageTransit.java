@@ -31,8 +31,9 @@ public class CreateVillageTransit {
 
     public CreateVillageTransit(IEventBus modBus, ModContainer container) {
         if (net.neoforged.fml.loading.FMLEnvironment.dist.isClient()) {
-            container.registerExtensionPoint(net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
-                    (mod, parent) -> new net.neoforged.neoforge.client.gui.ConfigurationScreen(mod, parent));
+            // Client-only helper class: referencing it from here keeps client classes out of the
+            // dedicated server's class path (the server crashed when this was inlined).
+            com.experiencedbutter.villagetransit.client.ClientConfigScreen.register(container);
         }
         VTConfig.register(container);
 

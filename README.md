@@ -2,7 +2,7 @@
 
 <img src="logo.png" alt="Create: Village Transit" width="160" align="right">
 
-> **Release 0.1.0** · Minecraft 1.21.1 · NeoForge 21.1 · Create 6.0.10 · MIT
+> **Release 0.1.1** · Minecraft 1.21.1 · NeoForge 21.1 · Create 6.0.10 · MIT
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green)]()
 [![NeoForge](https://img.shields.io/badge/NeoForge-21.1-orange)]()

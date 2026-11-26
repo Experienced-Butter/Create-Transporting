@@ -1,4 +1,4 @@
-# Create: Village Transit 0.1.0
+# Create: Village Transit 0.1.1
 
 **Villages become passenger stations for Create trains.**
 
@@ -29,7 +29,7 @@ Nothing else is required. JEI is optional and picks up the crafting recipes auto
 
 1. Install NeoForge 21.1 for Minecraft 1.21.1.
 2. Put `create-1.21.1-6.0.10-*.jar` into `mods/`.
-3. Put `create_village_transit-0.1.0.jar` into `mods/`.
+3. Put `create_village_transit-0.1.1.jar` into `mods/`.
 4. Launch the game. Everything is configured in `config/create_village_transit-server.toml`
    (63 options) or in the in-game config screen.
 
@@ -80,7 +80,7 @@ MIT. Contributions welcome — see `CONTRIBUTING.md`.
 
 1. 为 1.21.1 安装 NeoForge 21.1；
 2. 把 Create 6.0.10 的 jar 放进 `mods/`；
-3. 把 `create_village_transit-0.1.0.jar` 放进 `mods/`；
+3. 把 `create_village_transit-0.1.1.jar` 放进 `mods/`；
 4. 启动游戏。所有配置在 `config/create_village_transit-server.toml`（63 项），也可以在游戏内配置界面调整。
 
 ### 主要内容

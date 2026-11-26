@@ -29,7 +29,16 @@ public final class VTConfig {
     private static final ModConfigSpec.Builder B = new ModConfigSpec.Builder();
 
     // ---------------------------------------------------------------- village
-    private static final ModConfigSpec.EnumValue<VillageCheckMode> CHECK_MODE = B
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> STRUCTURE_TAGS = B
+            .comment("Structure tags that count as a village. Default: minecraft:village")
+            .defineList("village.structureTags", List.of("minecraft:village"),
+                    () -> "minecraft:village", o -> o instanceof String);
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> STRUCTURE_IDS = B
+            .comment("Exact structure ids that count as a village, for modded villages (e.g. ctov:village_plains).")
+            .defineList("village.structureIds", List.of(), () -> "", o -> o instanceof String);
+    private static final ModConfigSpec.ConfigValue<List<? extends String>> STRUCTURE_NAME_CONTAINS = B
+            .comment("Match any structure whose id contains one of these strings; covers most modded villages.")
+            .defineList("village.structureNameContains", List.of("village"), () -> "village", o -> o instanceof String);    private static final ModConfigSpec.EnumValue<VillageCheckMode> CHECK_MODE = B
             .comment("How a village station decides that it sits inside a village.",
                     "STRUCTURE_AND_POI: #minecraft:village structure start + nearby beds/workstations",
                     "STRUCTURE_ONLY: structure start only",
@@ -254,6 +263,9 @@ public final class VTConfig {
         static volatile Snapshot CURRENT = new Snapshot(true);
 
         public final VillageCheckMode checkMode;
+        public final List<String> structureTags;
+        public final List<String> structureIds;
+        public final List<String> structureNameContains;
         public final int censusRadius;
         public final int structureMargin;
         public final int minBeds;
@@ -328,6 +340,9 @@ public final class VTConfig {
         /** Defaults-only instance, used before the config file is loaded. */
         Snapshot(boolean defaults) {
             checkMode = VillageCheckMode.STRUCTURE_AND_POI;
+            structureTags = List.of("minecraft:village");
+            structureIds = List.of();
+            structureNameContains = List.of("village");
             censusRadius = 64;
             structureMargin = 16;
             minBeds = 3;
@@ -403,6 +418,9 @@ public final class VTConfig {
         /** Reads the loaded spec. */
         Snapshot() {
             checkMode = CHECK_MODE.get();
+            structureTags = List.copyOf(STRUCTURE_TAGS.get());
+            structureIds = List.copyOf(STRUCTURE_IDS.get());
+            structureNameContains = List.copyOf(STRUCTURE_NAME_CONTAINS.get());
             censusRadius = CENSUS_RADIUS.get();
             structureMargin = STRUCTURE_MARGIN.get();
             minBeds = MIN_BEDS.get();

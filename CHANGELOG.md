@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.2 — 2026-11-26
+
+### Changed
+
+- **Village detection is configurable**: the station no longer relies on the vanilla
+  `#minecraft:village` structure tag alone. It matches structures by tag (`village.structureTags`),
+  by exact id (`village.structureIds`) or by id fragment (`village.structureNameContains`, default
+  `village`), which covers village-replacing mods and datapacks on modpack servers.
+- The failure reason stays 
+ot_in_village_structure` when no configured structure matches.
+
+## 0.1.1 — 2026-11-26
+
+### Fixed
+
+- **Dedicated servers crashed on startup**: the in-game config screen was registered from the mod
+  constructor, which pulled the client-only `Screen` class into the server and aborted mod
+  construction (`Attempted to load class net/minecraft/client/gui/screens/Screen for invalid dist
+  DEDICATED_SERVER`). The registration now lives in a client-only helper class.
+
+### Added
+
+- CI now boots a dedicated server with the built jar on every push, so client classes leaking into
+  the common side fail the build instead of failing player servers.
+
 ## 0.1.0 — 2026-11-22
 
 ### Changed
