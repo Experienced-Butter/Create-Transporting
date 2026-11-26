@@ -38,7 +38,9 @@ public final class VTConfig {
             .defineList("village.structureIds", List.of(), () -> "", o -> o instanceof String);
     private static final ModConfigSpec.ConfigValue<List<? extends String>> STRUCTURE_NAME_CONTAINS = B
             .comment("Match any structure whose id contains one of these strings; covers most modded villages.")
-            .defineList("village.structureNameContains", List.of("village"), () -> "village", o -> o instanceof String);    private static final ModConfigSpec.EnumValue<VillageCheckMode> CHECK_MODE = B
+            .defineList("village.structureNameContains", List.of("village"), () -> "village", o -> o instanceof String);    private static final ModConfigSpec.BooleanValue KEEP_PREVIOUS_COUNTS = B
+            .comment("A survey that only saw part of the area keeps the previous (higher) villager count instead of dropping villagers it could not see.")
+            .define("village.keepPreviousCountsWhenTruncated", true);    private static final ModConfigSpec.EnumValue<VillageCheckMode> CHECK_MODE = B
             .comment("How a village station decides that it sits inside a village.",
                     "STRUCTURE_AND_POI: #minecraft:village structure start + nearby beds/workstations",
                     "STRUCTURE_ONLY: structure start only",
@@ -59,7 +61,7 @@ public final class VTConfig {
     private static final ModConfigSpec.BooleanValue REQUIRE_FULLY_LOADED = B
             .comment("Only census when every chunk of the scan area is loaded.",
                     "Prevents under-counting a village whose far half is unloaded.")
-            .define("village.requireFullyLoadedCensus", true);
+            .define("village.requireFullyLoadedCensus", false);
     private static final ModConfigSpec.IntValue CENSUS_RETRY_TICKS = B
             .comment("Retry delay after a census was skipped because chunks were missing.")
             .defineInRange("village.censusRetryTicks", 200, 1, 24000);
@@ -271,6 +273,7 @@ public final class VTConfig {
         public final int minBeds;
         public final int minWorkstations;
         public final boolean requireFullyLoadedCensus;
+        public final boolean keepPreviousCountsWhenTruncated;
         public final int censusRetryTicks;
         public final int censusRetryMaxTicks;
         public final int staleTimeoutMinutes;
@@ -347,7 +350,8 @@ public final class VTConfig {
             structureMargin = 16;
             minBeds = 3;
             minWorkstations = 1;
-            requireFullyLoadedCensus = true;
+            requireFullyLoadedCensus = false;
+            keepPreviousCountsWhenTruncated = true;
             censusRetryTicks = 200;
             censusRetryMaxTicks = 1200;
             staleTimeoutMinutes = 30;
@@ -426,6 +430,7 @@ public final class VTConfig {
             minBeds = MIN_BEDS.get();
             minWorkstations = MIN_WORKSTATIONS.get();
             requireFullyLoadedCensus = REQUIRE_FULLY_LOADED.get();
+            keepPreviousCountsWhenTruncated = KEEP_PREVIOUS_COUNTS.get();
             censusRetryTicks = CENSUS_RETRY_TICKS.get();
             censusRetryMaxTicks = CENSUS_RETRY_MAX_TICKS.get();
             staleTimeoutMinutes = STALE_TIMEOUT_MINUTES.get();

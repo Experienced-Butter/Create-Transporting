@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.1.4 — 2026-11-27
+
+### Added
+
+- `village.keepPreviousCountsWhenTruncated` (default true): a survey that could only see part of the
+  area keeps the previous villager and employment counts instead of reporting the smaller partial
+  number, so travellers are never lost just because chunks were unloaded.
+
+## 0.1.3 — 2026-11-27
+
+### Fixed
+
+- **Stations went STALE on busy servers and silently stopped paying**: the survey required every
+  chunk in the scan radius to be loaded (`village.requireFullyLoadedCensus`, default true). With the
+  default 64 block radius that is 9x9 chunks, which is almost never true away from a player, so the
+  survey never completed and active stations fell back to STALE after 30 minutes; STALE stations
+  neither produced travellers nor settled arrivals. The option now defaults to **false**: a survey
+  runs as soon as the station's own chunk is loaded and marks itself truncated instead.
+- Stale stations keep producing travellers unless `village.stopGeneratingWhenStale` is enabled
+  (that switch finally does what its name says).
+
 ## 0.1.2 — 2026-11-26
 
 ### Changed

@@ -127,15 +127,22 @@ public final class VillageTransitService {
             // Keep the previous numbers; retry later with a mild back-off.
             long retry = Math.min(cfg.censusRetryMaxTicks, cfg.censusRetryTicks * 2L);
             record.nextCensusTick = now + retry;
-            if (record.state == VillageStationState.ACTIVE && isStale(cfg, record, now)) {
+            if (cfg.stopGeneratingWhenStale && record.state == VillageStationState.ACTIVE && isStale(cfg, record, now)) {
                 record.state = VillageStationState.STALE;
             }
             syncBlockState(level, key.pos(), record);
             return;
         }
 
-        record.villagers = result.villagers();
-        record.employed = result.employed();
+        int countedVillagers = result.villagers();
+        int countedEmployed = result.employed();
+        if (result.incomplete() && cfg.keepPreviousCountsWhenTruncated && record.lastCensusTick >= 0L) {
+            // The area was only partly loaded: do not "lose" villagers we simply could not see.
+            countedVillagers = Math.max(countedVillagers, record.villagers);
+            countedEmployed = Math.max(countedEmployed, record.employed);
+        }
+        record.villagers = countedVillagers;
+        record.employed = countedEmployed;
         record.workstations = result.workstations();
         record.beds = result.beds();
         record.villageId = result.villageId();
@@ -193,7 +200,9 @@ public final class VillageTransitService {
     }
 
     private static void generateTravellers(GlobalPos key, StationRecord record, long now, VTConfig.Snapshot cfg) {
-        if (record.state != VillageStationState.ACTIVE || record.villagers <= 0) {
+        boolean generating = record.state == VillageStationState.ACTIVE
+                || (record.state == VillageStationState.STALE && !cfg.stopGeneratingWhenStale);
+        if (!generating || record.villagers <= 0) {
             return;
         }
         if (cfg.stopGeneratingWhenStale && record.lastCensusTick >= 0
