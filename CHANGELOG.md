@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.1.10 — 2026-11-28
+
+### Changed
+
+- `/cvtransit trains` now prints `seats=` and `free=` next to `onboard=`, so an empty boarding pass
+  can be told apart from "the train has no free seats".
+- The seat layout is written to the save **once per train** (first time its carriages are seen
+  loaded) instead of being compared and rewritten every second.
+
+## 0.1.9 — 2026-11-28
+
+### Fixed
+
+- **Seat layout is now captured every second while the carriages are loaded** (previously only when an
+  arrival happened), so a train that was never "seen" loaded kept an empty layout and nobody could
+  board at remote stations.
+- The `[transfer]` line now reports `waiting`, `seats` and `free`, which separates "no waiting
+  travellers" from "the layout is unknown".
+
+## 0.1.8 — 2026-11-28
+
+### Added
+
+- Diagnostics: with `debug.logTransfers = true`, every arrival now logs one line per traveller —
+  `[alight]` or `[stay]` — with purpose, patience before/after, the arrival village's villager count
+  and unemployment ratio, so a "train runs but nobody pays" report can be traced to the exact rule.
+
+## 0.1.7 — 2026-11-27
+
+### Changed
+
+- **Seat layout is captured once and persisted**: the first time a train's carriages are seen loaded,
+  the seat layout is stored in the train's manifest. Later arrivals at unloaded stations reuse it, so
+  boarding and payouts work while the player is far away and survive server restarts. The layout is
+  refreshed if it ever changes and discarded when the train is dismantled.
+
+## 0.1.6 — 2026-11-27
+
+### Fixed
+
+- **Arrivals at unloaded stations paid nothing**: when the train's carriages were not loaded, the
+  seat scan returned no seats, so nobody could board and the manifest stayed empty even though the
+  arrival fired. The last seat layout seen while the carriage was loaded is now cached per train and
+  reused, so boarding and payouts keep working while the player is far away.
+
 ## 0.1.5 — 2026-11-27
 
 ### Fixed

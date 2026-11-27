@@ -52,9 +52,21 @@ public final class ArrivalSettlement {
             PassengerData after = patienceLost ? passenger.withPatience(0) : Travellers.data(aged);
             boolean wantsOff = patienceLost || Rewards.wantsOff(after.purpose(), village, cfg);
             if (!wantsOff) {
+                if (cfg.logTransfers) {
+                    com.experiencedbutter.villagetransit.CreateVillageTransit.LOGGER.info(
+                            "[stay] purpose={} patience={}->{} villageV={} unemployed={}",
+                            after.purpose(), passenger.patience(), after.patience(), village.villagers,
+                            String.format("%.2f", village.unemployedRatio()));
+                }
                 entry.setValue(aged);
                 stayed++;
                 continue;
+            }
+            if (cfg.logTransfers) {
+                com.experiencedbutter.villagetransit.CreateVillageTransit.LOGGER.info(
+                        "[alight] purpose={} patience={}->{} villageV={} unemployed={} wantsOff={}",
+                        after.purpose(), passenger.patience(), after.patience(), village.villagers,
+                        String.format("%.2f", village.unemployedRatio()), wantsOff);
             }
             double distance = distanceBetween(passenger.origin(), villageKey, cfg);
             // No income for short hops: coming back to (or near) the origin pays nothing.

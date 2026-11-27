@@ -420,7 +420,10 @@ public final class VTCommand {
                     .append(" station=").append(station == null ? "-" : station.id.toString().substring(0, 8))
                     .append(" derailed=").append(train.derailed)
                     .append(" carriages=").append(train.carriages.size())
-                    .append(" onboard=").append(manifest == null ? 0 : manifest.size());
+                    .append(" onboard=").append(manifest == null ? 0 : manifest.size())
+                    .append(" seats=").append(manifest == null ? 0 : manifest.layout().size())
+                    .append(" free=").append(manifest == null ? 0
+                            : Math.max(0, manifest.layout().size() - manifest.size()));
         }
         String message = "trains: " + trains.size() + builder;
         source.sendSuccess(() -> Component.literal(message), false);

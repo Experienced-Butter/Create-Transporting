@@ -50,6 +50,8 @@ public final class TrainTracker {
     /** First tick after (re)start only records the current state, so trains sitting at a station
      *  are not paid out again. */
     private static boolean primed;
+    /** Last seat layout seen while the carriage was loaded; used when the train is far away. */
+    private static final Map<UUID, List<TrainManifest.SeatKey>> LAST_SEATS = new java.util.concurrent.ConcurrentHashMap<>();
 
     private TrainTracker() {
     }
@@ -90,6 +92,16 @@ public final class TrainTracker {
             if (firstTick || now % 20L == 0L) {
                 cachePosition(train);
                 syncSeatMarkers(server, data, train);
+                List<TrainManifest.SeatKey> scanned = findSeats(train);
+                if (!scanned.isEmpty()) {
+                    TrainManifest cached = data.manifest(train.id);
+                    // Only written once per train (assembly); the layout cannot change without a rebuild.
+                    if (cached.layout().isEmpty()) {
+                        cached.layout().clear();
+                        cached.layout().addAll(scanned);
+                        data.setDirty();
+                    }
+                }
             }
         }
 
@@ -146,9 +158,16 @@ public final class TrainTracker {
             return;
         }
         TrainManifest manifest = data.manifest(train.id);
+        int waitingBefore = village.passengers.size();
+        int freeSeatsBefore = 0;
 
         List<TrainManifest.SeatKey> seats = findSeats(train);
         Set<TrainManifest.SeatKey> playerSeats = findPlayerSeats(train);
+        for (TrainManifest.SeatKey seat : seats) {
+            if (!manifest.seats().containsKey(seat) && !playerSeats.contains(seat)) {
+                freeSeatsBefore++;
+            }
+        }
 
         // Seats that disappeared (contraption rebuilt) must not keep travellers forever.
         if (!seats.isEmpty()) {

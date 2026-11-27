@@ -22,9 +22,15 @@ public final class TrainManifest {
     }
 
     private final Map<SeatKey, ItemStack> seats = new LinkedHashMap<>();
+    /** Seat layout captured when the carriages were loaded; unchanged until the train is dismantled. */
+    private final java.util.List<SeatKey> layout = new java.util.ArrayList<>();
 
     public Map<SeatKey, ItemStack> seats() {
         return seats;
+    }
+
+    public java.util.List<SeatKey> layout() {
+        return layout;
     }
 
     public boolean isEmpty() {
@@ -50,6 +56,14 @@ public final class TrainManifest {
             list.add(entry);
         });
         tag.put("Seats", list);
+        ListTag layoutTag = new ListTag();
+        layout.forEach(key -> {
+            CompoundTag entry = new CompoundTag();
+            entry.putInt("Carriage", key.carriage());
+            entry.putLong("Seat", key.local().asLong());
+            layoutTag.add(entry);
+        });
+        tag.put("Layout", layoutTag);
         return tag;
     }
 
@@ -67,6 +81,11 @@ public final class TrainManifest {
                 continue;
             }
             manifest.seats.put(new SeatKey(entry.getInt("Carriage"), BlockPos.of(entry.getLong("Seat"))), stack);
+        }
+        ListTag layoutTag = tag.getList("Layout", Tag.TAG_COMPOUND);
+        for (int i = 0; i < layoutTag.size(); i++) {
+            CompoundTag entry = layoutTag.getCompound(i);
+            manifest.layout.add(new SeatKey(entry.getInt("Carriage"), BlockPos.of(entry.getLong("Seat"))));
         }
         return manifest;
     }
