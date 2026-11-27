@@ -28,7 +28,17 @@ public interface WrenchPickupBlock extends IWrenchable {
             return InteractionResult.SUCCESS;
         }
         level.destroyBlock(pos, false, player);
-        Block.popResource(level, pos, new ItemStack(state.getBlock().asItem()));
+        ItemStack picked = new ItemStack(state.getBlock().asItem());
+        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            // Put the block straight into the player's inventory, like Create's own wrench.
+            if (!serverPlayer.getInventory().add(picked)) {
+                Block.popResource(level, pos, picked);
+            } else {
+                serverPlayer.containerMenu.broadcastChanges();
+            }
+        } else {
+            Block.popResource(level, pos, picked);
+        }
         IWrenchable.playRemoveSound(level, pos);
         return InteractionResult.SUCCESS;
     }

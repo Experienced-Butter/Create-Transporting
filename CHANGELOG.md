@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.5 — 2026-11-27
+
+### Fixed
+
+- **Breaking the blocks with a pickaxe dropped nothing**: the mod shipped no loot tables, so all
+  nineteen blocks (station, lamp, trade station and the sixteen seats) were destroyed without a drop.
+  Loot tables are now generated for every block.
+- **Sneak + wrench now puts the block straight into the player's inventory** instead of dropping it
+  on the ground (falling back to a drop when the inventory is full).
+
 ## 0.1.4 — 2026-11-27
 
 ### Added
